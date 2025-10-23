@@ -8,19 +8,16 @@ var app = express();
 app.use(cors());
 app.use("/public", express.static(process.cwd() + "/public"));
 
-// Serve your HTML
 app.get("/", function (req, res) {
   res.sendFile(process.cwd() + "/views/index.html");
 });
 
-// ✅ Configure Multer
+// Multer setup
 const upload = multer({ dest: "uploads/" });
 
-// ✅ Handle file upload and respond with metadata
+// File upload route
 app.post("/api/fileanalyse", upload.single("upfile"), (req, res) => {
-  if (!req.file) {
-    return res.json({ error: "No file uploaded" });
-  }
+  if (!req.file) return res.json({ error: "No file uploaded" });
 
   res.json({
     name: req.file.originalname,
@@ -29,8 +26,7 @@ app.post("/api/fileanalyse", upload.single("upfile"), (req, res) => {
   });
 });
 
-// ✅ Start server
 const port = process.env.PORT || 3000;
 app.listen(port, function () {
-  console.log("Your app is listening on port " + port);
+  console.log("✅ App listening on port " + port);
 });
